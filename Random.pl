@@ -179,6 +179,7 @@ keepAll(Li, [Rank|T], [RankR|Tr]) :-
 /* columns of the original relation			      				*/
 /****************************************************************/              
 projection(HeaderP, relation(Header, Table), R) :- 
+	verifRelation(relation(Header, Table)),
 	findIndices(HeaderP,Header,R1),
 	keepRow(R1,Header,R2),
 	keepAll(R1,Table,R3),
@@ -312,7 +313,12 @@ join1(HeaderJ,Rel1,Rel2,Li2,RelR) :-
 /****************************************************************/     
    
 join(HeaderJ, Rel1,relation(ER2,Table2), RelR):-
-		
+	verifRelation(Rel1),
+    verifRelation(relation(ER2,Table2)),
+    join1(HeaderJ, Rel1, relation(ER2,Table2), L, R),
+    R=relation(I, M ),
+    findIndices(HeaderJ, I, I1),
+    removeT(I1, R, RelR).
 
 
 
